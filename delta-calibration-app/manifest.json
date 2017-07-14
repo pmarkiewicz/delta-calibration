@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+  "name": "Delta calibration app",
+  "version": "0.1",
+  "minimum_chrome_version": "54",
+  "icons": {
+    "16": "icon_16.png",
+    "128": "icon_128.png"
+  },
+  "app": {
+    "background": {
+      "scripts": ["utils.js", "logger.js", "dispatcher.js", "repetier.js", "eprom.js", "serial.js", "background.js"]
+    }
+  },
+
+	"permissions": [
+	  "serial",
+	  "usb",
+	  {
+	  "usbDevices": [
+		  { "vendorId": 6790, "productId": 29987 } ,
+		  { "vendorId": 4292, "productId": 60000 } ,
+		  { "vendorId": 1155, "productId": 22336 } ,
+		  { "vendorId": 1155, "productId": 57105 }
+	  ]}
+	]
+}
