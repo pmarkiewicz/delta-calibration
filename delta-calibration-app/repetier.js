@@ -48,7 +48,13 @@ const Repetier = function(serial) {
 				}
 				else if (this.isOkReceived() || Date.now() > this.lastUpdate) {
 					clearInterval(timerId);
-					resolve(this.receivedData);
+
+					if (this.receivedData) {
+						resolve(this.receivedData);
+					}
+					else  {
+						reject('timeout: no response from printer');
+					}
 				}
 			}, 200);
 		});
