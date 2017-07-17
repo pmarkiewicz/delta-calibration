@@ -13,13 +13,25 @@ const Repetier = function(serial) {
 
 	this.serial.onReadLine.addListener((line) => {
 		this.lastUpdate = Date.now() + 100;
-		this.receivedData.push(line);
+		if (!line.startsWith('wait')) {	// TODO: replace with ignore table
+			this.receivedData.push(line);
+		}
 	});
 
 	this.serial.onError.addListener((err) => {
 		this.error = err;
 	});
 
+
+	this.isOkReceived = () => {
+		for (l of this.receivedData) {
+			if (l.toUpperCase().startsWith('OK')) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	this.send = (code) => {
 		return new Promise((resolve, reject) => {
@@ -34,7 +46,7 @@ const Repetier = function(serial) {
 					clearInterval(timerId);
 					reject(this.error);
 				}
-				else if (Date.now() > this.lastUpdate) {
+				else if (this.isOkReceived() || Date.now() > this.lastUpdate) {
 					clearInterval(timerId);
 					resolve(this.receivedData);
 				}
